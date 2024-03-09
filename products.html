@@ -14,21 +14,17 @@
 		$.get("https://raw.githubusercontent.com/swoodberry13/JSONparsing/main/products.json",function( data ) {
 				console.log('raw data\n'+ data)
 				str = JSON.stringify(data);	
-				// parsley=JSON.parse(data);
-
-				// let text = "";
-				// for (const x in parsley) {
-				// 	text += parsley[x] + ", ";
-				// }
+				data = JSON.parse(data);
 				document.getElementById('json-data').innerHTML = str;
 				console.log('string data\n'+ str)
-				data = JSON.parse(data);
+
 				str = "<ul>";
 				data.forEach(function(product) { 
 				str += "<li>" 
 					+ product.name + " - " 
 					+ product.price + "</li>";
 				}) 
+				
 	str += "</ul>";
 	document.getElementById('json-list').innerHTML = str;  
 	})
