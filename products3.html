@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>JSONing</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<style type="text/css">
+		body{
+			background-color:#ad1f30;
+			margin: 40px 50px auto 50px; 
+			min-height: 300px; 
+			padding: 20px
+		}
+		
+		#filterBox {
+			background-color:  #ffc9e8;
+			border: 1px solid #ffffff;
+			border-radius: 3px;
+			color: #d4173d;
+			text-align: center;
+			margin-left: 50px;
+			margin-right: 10px;
+		}
+		#filterBox p{
+			display: inline-block;
+			padding-right: 10px;
+		}
+		#dropDown{
+			display: inline-block;
+		}
+		
+		ul{
+			list-style-type: none;
+		}
+		.product{
+			background-color: #ffffff;
+			border-radius: 3px;
+			border: 1px solid #ffc7fe;
+			display: block;
+			margin: 10px;
+			padding-top: 10px;
+			padding: 0px 10px 10px 20px;
+		}
+		.name{
+			color: #d4173d;
+			display: inline-block;
+			font-weight: bold;
+			padding: 0px 30px 0px 0px;
+			font-variant: all-small-caps;
+		}
+		.price{
+		display: inline-block;
+		color: #d4173d;
+		}
+		.description{
+			display: block;
+			font-size: 14px;
+			font-style: oblique;
+			color: #9c112d;
+			margin: 0px 0px 6px 0px;
+		}
+		.condition{
+			display: block;
+			color: #9c112d;	
+		}
+		.category{color: #9c112d;}
+		.category span{
+			display: inline-block;
+			margin: 8px 10px 0px 10px;
+			background-color: #ffc9e8;
+			color: #d4173d;
+			padding: 4px;
+			border-radius: 4px;
+			}
+	</style>
+
+</head>
+<body>
+	<script type="text/javascript">
+		$.get("https://raw.githubusercontent.com/swoodberry13/JSONparsing/main/products.json",function( data ) {
+				
+				str = JSON.stringify(data);	
+				data = JSON.parse(data);
+				myCatagories=[];
+
+				str = "<ul>";
+				data.forEach(function(product) { 
+				str += "<li class=\"product\">"+
+					"<h2 class=\"name\">" + product.name + "</h2>"+
+					"<p class=\"price\">" + product.price + "$</p>"+
+					"<p class=\"description\">" + product.description + "</p>"+
+					"<p class=\"condition\"> Condition: " + product.condition +"</p>";
+					str+="<div class=\"category\">Category:"
+
+					// looping through categories and adding them to page and myCategories array
+					for (let i in product.category){ 
+						if (!myCatagories.includes(product.category[i])) {
+							myCatagories.push(product.category[i]);
+						}
+						str+="<span id=\""+product.category[i]+"\">"+product.category[i]+"</span>";
+					}
+					str+="</div></li>"
+				}) 
+			str += "</ul>";//finishing my ul for the products
+
+
+
+			//drop down code
+			drop_down_str="<div id=\"filterBox\"><p>Filter: </p> <select name=\"filter\" id=\"dropDown\" onChange=\"filterFunct(this)\">";
+
+			//adding unselectable starting option
+			drop_down_str+="<option disabled selected value> -- select an option -- </option>";
+
+			for(let i in myCatagories){//reads in categories from JSON 
+				drop_down_str+="<option value=\""+myCatagories[i]+"\">"+myCatagories[i]+"</option>";
+			}
+			drop_down_str+="</select></div>";
+			str=drop_down_str+str;
+			document.getElementById('json-list').innerHTML = str;//adding products to the page along with the drop down
+			})
+
+
+
+	function filterFunct(select){
+		pick=$('#dropDown option:selected').text();//reads in which form option was picked
+		pick="#"+pick;
+
+		//selects all the categories that don't have the pick
+		notPickStr=".category:not(:has("+pick+"))";
+
+		//gets the parent of the not picked categories (the li item) and makes it disappear
+		$(notPickStr).parent().css({"display":" none"});
+	}
+	</script>
+	<div id="json-list"></div>
+</body>
+</html>

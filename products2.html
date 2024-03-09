@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>JSONing</title>
+	<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   
+	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   
+	crossorigin="anonymous"></script>
+	<style type="text/css">
+		body{
+			background-color:#ad1f30;
+			margin: 40px 50px auto 50px; 
+			min-height: 300px; 
+			padding: 20px}
+		}
+		ul{
+			list-style-type: none;
+		}
+		.product{
+			background-color: #ffffff;
+			border-radius: 3px;
+			border: 1px solid #ffc7fe;
+			display: block;
+			margin: 10px;
+			padding-top: 10px;
+			padding: 0px 10px 10px 20px;
+		}
+		.name{
+			color: #d4173d;
+			display: inline-block;
+			font-weight: bold;
+			padding: 0px 30px 0px 0px;
+			font-variant: all-small-caps;
+		}
+		.price{
+		display: inline-block;
+		color: #d4173d;
+		}
+		.description{
+			display: block;
+			font-size: 14px;
+			font-style: oblique;
+			color: #9c112d;
+			margin: 0px 0px 6px 0px;
+		}
+		.condition{
+			display: block;
+			color: #9c112d;	
+		}
+		.category{color: #9c112d;}
+		.category span{
+			display: inline-block;
+			margin: 8px 10px 0px 10px;
+			background-color: #ffc9e8;
+			color: #d4173d;
+			padding: 4px;
+			border-radius: 4px;
+			}
+	</style>
+
+</head>
+<body>
+	<script type="text/javascript">
+		$.get("https://raw.githubusercontent.com/swoodberry13/JSONparsing/main/products.json",function( data ) {
+				console.log('raw data\n'+ data)
+				str = JSON.stringify(data);	
+				data = JSON.parse(data);
+
+				console.log('string data\n'+ str)
+
+				str = "<ul>";
+
+				data.forEach(function(product) { 
+				str += "<li class=\"product\">"+
+					"<h2 class=\"name\">" + product.name + "</h2>"+
+					"<p class=\"price\">" + product.price + "$</p>"+
+					"<p class=\"description\">" + product.description + "</p>"+
+					"<p class=\"condition\"> Condition: " + product.condition +"</p>";
+					str+="<div class=\"category\">Category:"
+
+					for (let i in product.category){
+						str+="<span>"+product.category[i]+"</span>";
+					}
+					str+="</div></li>"
+				}) 
+
+			str += "</ul>";
+			document.getElementById('json-list').innerHTML = str;  
+			})
+	</script>
+	<div id="json-data">&nbsp;</div>
+	<div id="json-list">&nbsp;</div>
+</body>
+</html>
