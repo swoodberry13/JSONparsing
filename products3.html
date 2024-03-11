@@ -129,8 +129,13 @@
 		//selects all the categories that don't have the pick
 		notPickStr=".category:not(:has("+pick+"))";
 
+		//selects all the categories that have the pick
+		pickStr=".category:has("+pick+")";
+
 		//gets the parent of the not picked categories (the li item) and makes it disappear
 		$(notPickStr).parent().css({"display":" none"});
+		//gets the parent of the picked categories (the li item) and makes it appear
+		$(pickStr).parent().css({"display":"block"});
 	}
 	</script>
 	<div id="json-list"></div>
